@@ -24,7 +24,7 @@
     "middleware",
     "typescript"
   ],
-  "author": "",
+  "author": "Ofek Gabay <ofek.gabay.he@gmail.com>",
   "license": "MIT",
   "peerDependencies": {
     "@nestjs/common": "^9.0.0 || ^10.0.0",
