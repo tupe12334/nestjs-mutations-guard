@@ -50,7 +50,7 @@ export class AdminController {
 // Main application module - just import MutationsGuardModule!
 @Module({
   imports: [
-    MutationsGuardModule, // This single import protects ALL routes globally
+    MutationsGuardModule.register(), // This single import protects ALL routes globally
   ],
   controllers: [UsersController, AdminController],
 })
