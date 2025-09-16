@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { EnvConfigFactory } from '../src/factories/env-config.factory';
+import { EnvConfigFactory } from './env-config.factory';
 
 describe('EnvConfigFactory', () => {
   let factory: EnvConfigFactory;

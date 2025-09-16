@@ -4,14 +4,14 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['tests/**/*.test.ts'],
+    include: ['src/**/*.test.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov', 'html'],
       exclude: [
         'node_modules/**',
         'dist/**',
-        'tests/**',
+        'src/**/*.test.ts',
         '**/*.d.ts',
         'vitest.config.ts',
         '.eslintrc.js'

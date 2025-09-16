@@ -1,7 +1,7 @@
 import { SetMetadata } from '@nestjs/common';
 import { describe, it, expect, vi } from 'vitest';
-import { AllowMutations } from '../src/decorators/allow-mutations.decorator';
-import { ALLOW_MUTATIONS_KEY } from '../src/constants/metadata.constants';
+import { AllowMutations } from './allow-mutations.decorator';
+import { ALLOW_MUTATIONS_KEY } from '../constants/metadata.constants';
 
 vi.mock('@nestjs/common', () => ({
   SetMetadata: vi.fn(),
