@@ -15,25 +15,29 @@ describe('EnvConfigFactory', () => {
   });
 
   it('should return true when BLOCK_MUTATIONS is "true"', () => {
-    process.env['BLOCK_MUTATIONS'] = 'true';
+    const env = process.env;
+    env['BLOCK_MUTATIONS'] = 'true';
 
     expect(factory.shouldBlockMutations()).toBe(true);
   });
 
   it('should return false when BLOCK_MUTATIONS is "false"', () => {
-    process.env['BLOCK_MUTATIONS'] = 'false';
+    const env = process.env;
+    env['BLOCK_MUTATIONS'] = 'false';
 
     expect(factory.shouldBlockMutations()).toBe(false);
   });
 
   it('should return false when BLOCK_MUTATIONS is not set', () => {
-    delete process.env['BLOCK_MUTATIONS'];
+    const env = process.env;
+    delete env['BLOCK_MUTATIONS'];
 
     expect(factory.shouldBlockMutations()).toBe(false);
   });
 
   it('should return false when BLOCK_MUTATIONS is any other value', () => {
-    process.env['BLOCK_MUTATIONS'] = 'yes';
+    const env = process.env;
+    env['BLOCK_MUTATIONS'] = 'yes';
 
     expect(factory.shouldBlockMutations()).toBe(false);
   });

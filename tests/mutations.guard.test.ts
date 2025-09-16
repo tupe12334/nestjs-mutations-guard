@@ -32,13 +32,19 @@ describe('MutationsGuard', () => {
   });
 
   const createMockContext = (method: string): ExecutionContext => {
-    return {
+    const mockContext = {
       switchToHttp: () => ({
         getRequest: () => ({ method }),
       }),
       getHandler: vi.fn(),
       getClass: vi.fn(),
-    } as ExecutionContext;
+      getArgs: vi.fn(),
+      getArgByIndex: vi.fn(),
+      switchToRpc: vi.fn(),
+      switchToWs: vi.fn(),
+      getType: vi.fn(),
+    };
+    return mockContext as const;
   };
 
   describe('when mutations are not blocked', () => {
@@ -114,8 +120,9 @@ describe('MutationsGuard', () => {
 
       try {
         guard.canActivate(context);
-      } catch (error) {
-        expect(error.message).toBe(
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        expect(errorMessage).toBe(
           'HTTP POST mutations are currently blocked. Use @AllowMutations() decorator to override.',
         );
       }
