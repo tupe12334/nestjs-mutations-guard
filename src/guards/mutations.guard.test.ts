@@ -21,20 +21,21 @@ describe('MutationsGuard Unit Tests', () => {
   });
 
   const createMockContext = (method: string): ExecutionContext => {
-    return {
+    const mockContext: ExecutionContext = {
       switchToHttp: () => ({
         getRequest: () => ({ method }),
         getResponse: () => ({}),
         getNext: () => ({}),
       }),
-      getHandler: () => ({}) as any,
-      getClass: () => ({}) as any,
+      getHandler: () => ({}),
+      getClass: () => ({}),
       getArgs: () => [],
       getArgByIndex: () => ({}),
-      switchToRpc: () => ({}) as any,
-      switchToWs: () => ({}) as any,
+      switchToRpc: () => ({}),
+      switchToWs: () => ({}),
       getType: () => 'http',
-    } as ExecutionContext;
+    } as const;
+    return mockContext;
   };
 
   describe('Basic Functionality', () => {
