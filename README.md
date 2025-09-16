@@ -55,7 +55,23 @@ export class UsersController {
 }
 ```
 
-### 2. Global Guard (Recommended)
+### 2. Simple Module Import (Recommended)
+
+```typescript
+import { Module } from '@nestjs/common';
+import { MutationsGuardModule } from 'nestjs-mutations-guard';
+
+@Module({
+  imports: [
+    // Simply import the module - that's it!
+    MutationsGuardModule,
+  ],
+  controllers: [/* your controllers */],
+})
+export class AppModule {}
+```
+
+### 3. Manual Global Guard Setup
 
 ```typescript
 import { Module } from '@nestjs/common';
@@ -73,7 +89,7 @@ import { MutationsGuard } from 'nestjs-mutations-guard';
 export class AppModule {}
 ```
 
-### 3. Environment Configuration
+### 4. Environment Configuration
 
 Set the environment variable to control mutation blocking:
 
@@ -94,9 +110,17 @@ BLOCK_MUTATIONS=false
 
 ## API Reference
 
+### `MutationsGuardModule`
+
+A pre-configured module that automatically sets up the global mutations guard. Simply import this module into your app module.
+
+```typescript
+imports: [MutationsGuardModule]
+```
+
 ### `MutationsGuard`
 
-The main guard class that implements the mutation blocking logic.
+The main guard class that implements the mutation blocking logic. Use this if you need manual setup or more control.
 
 ### `@AllowMutations()`
 
