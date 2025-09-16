@@ -25,12 +25,12 @@ describe('MutationsGuard', () => {
       }),
       getHandler: vi.fn(),
       getClass: vi.fn(),
-    } as any;
+    } as ExecutionContext;
   };
 
   describe('when BLOCK_MUTATIONS is false', () => {
     beforeEach(() => {
-      process.env.BLOCK_MUTATIONS = 'false';
+      process.env['BLOCK_MUTATIONS'] = 'false';
     });
 
     it('should allow all requests', () => {
@@ -43,7 +43,7 @@ describe('MutationsGuard', () => {
 
   describe('when BLOCK_MUTATIONS is true', () => {
     beforeEach(() => {
-      process.env.BLOCK_MUTATIONS = 'true';
+      process.env['BLOCK_MUTATIONS'] = 'true';
     });
 
     it('should allow GET requests', () => {
@@ -111,7 +111,7 @@ describe('MutationsGuard', () => {
 
   describe('reflector metadata handling', () => {
     beforeEach(() => {
-      process.env.BLOCK_MUTATIONS = 'true';
+      process.env['BLOCK_MUTATIONS'] = 'true';
     });
 
     it('should call reflector with correct parameters', () => {

@@ -8,6 +8,8 @@ import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { ALLOW_MUTATIONS_KEY, MUTATION_METHODS } from '../constants/metadata.constants';
 
+type MutationMethod = typeof MUTATION_METHODS[number];
+
 @Injectable()
 export class MutationsGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
@@ -31,7 +33,7 @@ export class MutationsGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request>();
     const method = request.method.toUpperCase();
 
-    if (MUTATION_METHODS.includes(method as any)) {
+    if (MUTATION_METHODS.includes(method as MutationMethod)) {
       throw new ForbiddenException(
         `HTTP ${method} mutations are currently blocked. Use @AllowMutations() decorator to override.`,
       );
@@ -41,6 +43,6 @@ export class MutationsGuard implements CanActivate {
   }
 
   private getBlockMutationsFlag(): boolean {
-    return process.env.BLOCK_MUTATIONS === 'true';
+    return process.env['BLOCK_MUTATIONS'] === 'true';
   }
 }
