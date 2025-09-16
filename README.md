@@ -25,81 +25,46 @@ yarn add nestjs-mutations-guard
 
 ## Quick Start
 
-### 1. Basic Usage
-
-```typescript
-import { Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { MutationsGuard, AllowMutations } from 'nestjs-mutations-guard';
-
-@Controller('users')
-@UseGuards(MutationsGuard)
-export class UsersController {
-  @Get()
-  findAll() {
-    // GET requests are always allowed
-    return { users: [] };
-  }
-
-  @Post()
-  create() {
-    // This will be blocked when BLOCK_MUTATIONS=true
-    return { message: 'User created' };
-  }
-
-  @Post('special')
-  @AllowMutations()
-  createSpecial() {
-    // This will ALWAYS work, even when BLOCK_MUTATIONS=true
-    return { message: 'Special user created' };
-  }
-}
-```
-
-### 2. Simple Module Import (Recommended)
+### 1. Simple Module Import (Recommended)
 
 ```typescript
 import { Module } from '@nestjs/common';
 import { MutationsGuardModule } from 'nestjs-mutations-guard';
 
 @Module({
-  imports: [
-    // Simply import the module - that's it!
-    MutationsGuardModule,
-  ],
-  controllers: [/* your controllers */],
+  imports: [MutationsGuardModule], // That's it!
 })
 export class AppModule {}
 ```
 
-### 3. Manual Global Guard Setup
-
-```typescript
-import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
-import { MutationsGuard } from 'nestjs-mutations-guard';
-
-@Module({
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: MutationsGuard,
-    },
-  ],
-})
-export class AppModule {}
-```
-
-### 4. Environment Configuration
-
-Set the environment variable to control mutation blocking:
+### 2. Environment Configuration
 
 ```bash
 # Block all mutations
 BLOCK_MUTATIONS=true
 
-# Allow all mutations (default behavior)
+# Allow all mutations (default)
 BLOCK_MUTATIONS=false
 ```
+
+### 3. Override Specific Routes
+
+```typescript
+import { AllowMutations } from 'nestjs-mutations-guard';
+
+@Post()
+@AllowMutations() // Always allows this route
+createUser() { /* ... */ }
+```
+
+## 📁 Examples
+
+For complete working examples, see the [`examples/`](./examples/) folder:
+
+- **[`simple-module.example.ts`](./examples/simple-module.example.ts)** - Basic module import
+- **[`app-with-module.example.ts`](./examples/app-with-module.example.ts)** - Complete app with controllers and decorators
+- **[`basic-usage.example.ts`](./examples/basic-usage.example.ts)** - Individual guard usage
+- **[`global-guard.example.ts`](./examples/global-guard.example.ts)** - Manual global guard setup
 
 ## How It Works
 
