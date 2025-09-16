@@ -13,7 +13,14 @@ A simple and lightweight NestJS package that provides a global guard to prevent 
 ## Installation
 
 ```bash
+# npm
 npm install nestjs-mutations-guard
+
+# pnpm
+pnpm add nestjs-mutations-guard
+
+# yarn
+yarn add nestjs-mutations-guard
 ```
 
 ## Quick Start
@@ -135,19 +142,28 @@ When a mutation is blocked, the guard throws a `ForbiddenException` with a descr
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Run tests
-npm test
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
 
 # Run tests with coverage
-npm run test:coverage
+pnpm test:coverage
 
 # Build the package
-npm run build
+pnpm build
 
 # Lint code
-npm run lint
+pnpm lint
+
+# Release (with automated changelog and publishing)
+pnpm release
+
+# Dry run release
+pnpm release:dry
 ```
 
 ## Contributing

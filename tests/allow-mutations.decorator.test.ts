@@ -1,14 +1,15 @@
 import { SetMetadata } from '@nestjs/common';
+import { describe, it, expect, vi } from 'vitest';
 import { AllowMutations } from '../src/decorators/allow-mutations.decorator';
 import { ALLOW_MUTATIONS_KEY } from '../src/constants/metadata.constants';
 
-jest.mock('@nestjs/common', () => ({
-  SetMetadata: jest.fn(),
+vi.mock('@nestjs/common', () => ({
+  SetMetadata: vi.fn(),
 }));
 
 describe('AllowMutations decorator', () => {
   it('should call SetMetadata with correct parameters', () => {
-    const setMetadataSpy = jest.mocked(SetMetadata);
+    const setMetadataSpy = vi.mocked(SetMetadata);
 
     AllowMutations();
 

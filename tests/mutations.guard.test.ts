@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { MutationsGuard } from '../src/guards/mutations.guard';
 import { ALLOW_MUTATIONS_KEY } from '../src/constants/metadata.constants';
 
@@ -22,8 +23,8 @@ describe('MutationsGuard', () => {
       switchToHttp: () => ({
         getRequest: () => ({ method }),
       }),
-      getHandler: jest.fn(),
-      getClass: jest.fn(),
+      getHandler: vi.fn(),
+      getClass: vi.fn(),
     } as any;
   };
 
@@ -34,7 +35,7 @@ describe('MutationsGuard', () => {
 
     it('should allow all requests', () => {
       const context = createMockContext('POST');
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+      vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
 
       expect(guard.canActivate(context)).toBe(true);
     });
@@ -47,56 +48,56 @@ describe('MutationsGuard', () => {
 
     it('should allow GET requests', () => {
       const context = createMockContext('GET');
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+      vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
 
       expect(guard.canActivate(context)).toBe(true);
     });
 
     it('should block POST requests', () => {
       const context = createMockContext('POST');
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+      vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
 
       expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
 
     it('should block PUT requests', () => {
       const context = createMockContext('PUT');
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+      vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
 
       expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
 
     it('should block PATCH requests', () => {
       const context = createMockContext('PATCH');
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+      vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
 
       expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
 
     it('should block DELETE requests', () => {
       const context = createMockContext('DELETE');
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+      vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
 
       expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
 
     it('should allow mutation requests when @AllowMutations decorator is present', () => {
       const context = createMockContext('POST');
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(true);
+      vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(true);
 
       expect(guard.canActivate(context)).toBe(true);
     });
 
     it('should handle case-insensitive HTTP methods', () => {
       const context = createMockContext('post');
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+      vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
 
       expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
 
     it('should throw proper error message', () => {
       const context = createMockContext('POST');
-      jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+      vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
 
       try {
         guard.canActivate(context);
@@ -115,7 +116,7 @@ describe('MutationsGuard', () => {
 
     it('should call reflector with correct parameters', () => {
       const context = createMockContext('POST');
-      const spy = jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+      const spy = vi.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
 
       try {
         guard.canActivate(context);
