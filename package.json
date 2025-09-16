@@ -1,6 +1,6 @@
 {
   "name": "nestjs-mutations-guard",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A NestJS guard to prevent HTTP mutations with configurable flag and override decorator",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
