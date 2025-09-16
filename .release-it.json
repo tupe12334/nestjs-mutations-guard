@@ -6,7 +6,6 @@
   },
   "npm": {
     "publish": true,
-    "publishPath": "dist",
     "token": "${NPM_TOKEN}"
   },
   "github": {
