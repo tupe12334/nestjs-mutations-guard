@@ -1,2 +1,3 @@
 export const ALLOW_MUTATIONS_KEY = 'allow_mutations',
-  MUTATION_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'] as const;
+  MUTATION_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'] as const,
+  MUTATIONS_CONFIG_TOKEN = 'MUTATIONS_CONFIG_FACTORY';

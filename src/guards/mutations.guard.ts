@@ -3,16 +3,20 @@ import {
   ExecutionContext,
   Injectable,
   ForbiddenException,
+  Inject,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Request } from 'express';
-import { ALLOW_MUTATIONS_KEY, MUTATION_METHODS } from '../constants/metadata.constants';
+import { ALLOW_MUTATIONS_KEY, MUTATION_METHODS, MUTATIONS_CONFIG_TOKEN } from '../constants/metadata.constants';
+import { MutationsConfigFactory } from '../interfaces/mutations-config.interface';
 
 type MutationMethod = typeof MUTATION_METHODS[number];
 
 @Injectable()
 export class MutationsGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    @Inject(MUTATIONS_CONFIG_TOKEN) private configFactory: MutationsConfigFactory,
+  ) {}
 
   canActivate(context: ExecutionContext): boolean {
     const isAllowedByDecorator = this.reflector.getAllAndOverride<boolean>(
@@ -24,13 +28,13 @@ export class MutationsGuard implements CanActivate {
       return true;
     }
 
-    const blockMutations = this.getBlockMutationsFlag();
+    const blockMutations = this.configFactory.shouldBlockMutations();
 
     if (!blockMutations) {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest<Request>();
+    const request = context.switchToHttp().getRequest<{ method: string }>();
     const method = request.method.toUpperCase();
 
     if (MUTATION_METHODS.includes(method as MutationMethod)) {
@@ -40,9 +44,5 @@ export class MutationsGuard implements CanActivate {
     }
 
     return true;
-  }
-
-  private getBlockMutationsFlag(): boolean {
-    return process.env['BLOCK_MUTATIONS'] === 'true';
   }
 }

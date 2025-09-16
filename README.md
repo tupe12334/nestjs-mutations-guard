@@ -32,7 +32,7 @@ import { Module } from '@nestjs/common';
 import { MutationsGuardModule } from 'nestjs-mutations-guard';
 
 @Module({
-  imports: [MutationsGuardModule], // That's it!
+  imports: [MutationsGuardModule.register()], // That's it!
 })
 export class AppModule {}
 ```
@@ -57,31 +57,79 @@ import { AllowMutations } from 'nestjs-mutations-guard';
 createUser() { /* ... */ }
 ```
 
+### 4. Custom Configuration Factory
+
+```typescript
+import { MutationsGuardModule, MutationsConfigFactory } from 'nestjs-mutations-guard';
+
+class CustomConfigFactory implements MutationsConfigFactory {
+  shouldBlockMutations(): boolean {
+    // Your custom logic here
+    return this.configService.get('MAINTENANCE_MODE') === 'true';
+  }
+}
+
+@Module({
+  imports: [
+    MutationsGuardModule.register({
+      configFactory: new CustomConfigFactory(),
+    }),
+  ],
+})
+export class AppModule {}
+```
+
 ## 📁 Examples
 
 For complete working examples, see the [`examples/`](./examples/) folder:
 
 - **[`simple-module.example.ts`](./examples/simple-module.example.ts)** - Basic module import
 - **[`app-with-module.example.ts`](./examples/app-with-module.example.ts)** - Complete app with controllers and decorators
+- **[`custom-factory.example.ts`](./examples/custom-factory.example.ts)** - Custom configuration factories
 - **[`basic-usage.example.ts`](./examples/basic-usage.example.ts)** - Individual guard usage
 - **[`global-guard.example.ts`](./examples/global-guard.example.ts)** - Manual global guard setup
 
 ## How It Works
 
-1. **Default behavior**: When `BLOCK_MUTATIONS` is not set or is `false`, all requests pass through normally
-2. **Blocking mode**: When `BLOCK_MUTATIONS=true`, the guard blocks all POST, PUT, PATCH, and DELETE requests
-3. **Override**: Routes decorated with `@AllowMutations()` always allow mutations regardless of the flag
-4. **Safe methods**: GET, HEAD, OPTIONS requests are never blocked
+1. **Configuration Factory**: The guard uses a configurable factory to determine if mutations should be blocked
+2. **Default behavior**: Uses `EnvConfigFactory` by default, which reads `BLOCK_MUTATIONS` environment variable
+3. **Custom logic**: You can provide your own factory for complex logic (database, config service, feature flags, etc.)
+4. **Override**: Routes decorated with `@AllowMutations()` always allow mutations regardless of the configuration
+5. **Safe methods**: GET, HEAD, OPTIONS requests are never blocked
 
 ## API Reference
 
 ### `MutationsGuardModule`
 
-A pre-configured module that automatically sets up the global mutations guard. Simply import this module into your app module.
+A pre-configured module that automatically sets up the global mutations guard.
+
+**Methods:**
+- `register(options?)` - Set up the module with optional custom configuration factory
+- `forRoot(options?)` - Alias for `register()`
 
 ```typescript
-imports: [MutationsGuardModule]
+// Default setup (uses environment variable)
+MutationsGuardModule.register()
+
+// Custom factory
+MutationsGuardModule.register({
+  configFactory: new CustomConfigFactory()
+})
 ```
+
+### `MutationsConfigFactory`
+
+Interface for creating custom configuration logic.
+
+```typescript
+interface MutationsConfigFactory {
+  shouldBlockMutations(): boolean;
+}
+```
+
+### `EnvConfigFactory`
+
+Default factory that reads from `BLOCK_MUTATIONS` environment variable.
 
 ### `MutationsGuard`
 

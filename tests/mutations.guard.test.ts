@@ -3,15 +3,28 @@ import { ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { MutationsGuard } from '../src/guards/mutations.guard';
-import { ALLOW_MUTATIONS_KEY } from '../src/constants/metadata.constants';
+import { ALLOW_MUTATIONS_KEY, MUTATIONS_CONFIG_TOKEN } from '../src/constants/metadata.constants';
+import { MutationsConfigFactory } from '../src/interfaces/mutations-config.interface';
 
 describe('MutationsGuard', () => {
   let guard: MutationsGuard;
   let reflector: Reflector;
+  let mockConfigFactory: MutationsConfigFactory;
 
   beforeEach(async () => {
+    mockConfigFactory = {
+      shouldBlockMutations: vi.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MutationsGuard, Reflector],
+      providers: [
+        MutationsGuard,
+        Reflector,
+        {
+          provide: MUTATIONS_CONFIG_TOKEN,
+          useValue: mockConfigFactory,
+        },
+      ],
     }).compile();
 
     guard = module.get<MutationsGuard>(MutationsGuard);
@@ -28,9 +41,9 @@ describe('MutationsGuard', () => {
     } as ExecutionContext;
   };
 
-  describe('when BLOCK_MUTATIONS is false', () => {
+  describe('when mutations are not blocked', () => {
     beforeEach(() => {
-      process.env['BLOCK_MUTATIONS'] = 'false';
+      vi.mocked(mockConfigFactory.shouldBlockMutations).mockReturnValue(false);
     });
 
     it('should allow all requests', () => {
@@ -41,9 +54,9 @@ describe('MutationsGuard', () => {
     });
   });
 
-  describe('when BLOCK_MUTATIONS is true', () => {
+  describe('when mutations are blocked', () => {
     beforeEach(() => {
-      process.env['BLOCK_MUTATIONS'] = 'true';
+      vi.mocked(mockConfigFactory.shouldBlockMutations).mockReturnValue(true);
     });
 
     it('should allow GET requests', () => {
@@ -111,7 +124,7 @@ describe('MutationsGuard', () => {
 
   describe('reflector metadata handling', () => {
     beforeEach(() => {
-      process.env['BLOCK_MUTATIONS'] = 'true';
+      vi.mocked(mockConfigFactory.shouldBlockMutations).mockReturnValue(true);
     });
 
     it('should call reflector with correct parameters', () => {
