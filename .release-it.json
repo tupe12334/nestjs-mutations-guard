@@ -6,11 +6,13 @@
   },
   "npm": {
     "publish": true,
-    "publishPath": "dist"
+    "publishPath": "dist",
+    "token": "${NPM_TOKEN}"
   },
   "github": {
     "release": true,
-    "releaseName": "Release v${version}"
+    "releaseName": "Release v${version}",
+    "token": "${GITHUB_TOKEN}"
   },
   "plugins": {
     "@release-it/conventional-changelog": {

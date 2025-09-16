@@ -12,8 +12,8 @@
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
-    "release": "release-it",
-    "release:dry": "release-it --dry-run",
+    "release": "dotenv -e .env -- release-it",
+    "release:dry": "dotenv -e .env -- release-it --dry-run",
     "prepublishOnly": "pnpm build"
   },
   "keywords": [
@@ -38,6 +38,7 @@
     "@nestjs/testing": "^10.0.0",
     "@types/node": "^20.0.0",
     "@vitest/coverage-v8": "^1.0.0",
+    "dotenv-cli": "10.0.0",
     "eslint": "^9.0.0",
     "eslint-config-agent": "^1.0.0",
     "reflect-metadata": "^0.1.13",
